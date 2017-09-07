@@ -1,9 +1,9 @@
 package com.github.stoton.service
 
-import com.github.stoton.domain.TimeTableIndexItem
+import com.github.stoton.domain.TimetableIndexItem
 
 import scala.collection.mutable.ListBuffer
 
 trait Scraper {
-  def scrapDateFromPage(url: String): ListBuffer[TimeTableIndexItem]
+  def parseDataFromZsatTimetable(): ListBuffer[TimetableIndexItem]
 }
