@@ -1,20 +1,20 @@
-package com.github.stoton.scraper;
+package com.github.stoton.parser;
 
 import com.github.stoton.domain.TimetableType;
 
-public class ScraperFactory {
+public class ParserFactory {
 
-    public static TimetableScraper createParser(TimetableType type) {
+    public static TimetableParser createParser(TimetableType type) {
         if(type == TimetableType.STUDENT) {
-            return new StudentTimetableScraper();
+            return new StudentTimetableParser();
         }
 
         if(type == TimetableType.CLASSROOM) {
-            return new ClassroomTimetableScraper();
+            return new ClassroomTimetableParser();
         }
 
         if(type == TimetableType.TEACHER) {
-            return new TeacherTimetableScraper();
+            return new TeacherTimetableParser();
         }
 
         throw  new IllegalStateException("Unkown type: " + type);

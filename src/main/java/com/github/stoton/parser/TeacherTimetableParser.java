@@ -1,4 +1,4 @@
-package com.github.stoton.scraper;
+package com.github.stoton.parser;
 
 import com.github.stoton.domain.*;
 import com.github.stoton.repository.TimetableIndexItemRepository;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class TeacherTimetableScraper implements TimetableScraper {
+public class TeacherTimetableParser implements TimetableParser {
 
     @Override
     public DayContener parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException {
@@ -87,6 +87,8 @@ public class TeacherTimetableScraper implements TimetableScraper {
                 Utils.addLessonToDay(monday, tuesday, wednesday, thursday, friday, lesson, choice);
             }
         }
+
+        Utils.deleteEmptyLessonFromTop(monday, tuesday, wednesday, thursday, friday);
 
         return new DayContener.DayContenerBuilder()
                 .monday(monday)

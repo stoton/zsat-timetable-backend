@@ -5,11 +5,14 @@ import java.util.List;
 
 public class DayContener {
 
-    private final List<Lesson> monday;
-    private final List<Lesson> tuesday;
-    private final List<Lesson> wednesday;
-    private final List<Lesson> thursday;
-    private final List<Lesson> friday;
+    private  List<Lesson> monday;
+    private  List<Lesson> tuesday;
+    private  List<Lesson> wednesday;
+    private  List<Lesson> thursday;
+    private  List<Lesson> friday;
+
+    public DayContener() {
+    }
 
     private DayContener(DayContenerBuilder builder) {
         this.monday = builder.monday;
@@ -33,6 +36,26 @@ public class DayContener {
 
     public List<Lesson> getThursday() {
         return thursday;
+    }
+
+    public void setMonday(List<Lesson> monday) {
+        this.monday = monday;
+    }
+
+    public void setTuesday(List<Lesson> tuesday) {
+        this.tuesday = tuesday;
+    }
+
+    public void setWednesday(List<Lesson> wednesday) {
+        this.wednesday = wednesday;
+    }
+
+    public void setThursday(List<Lesson> thursday) {
+        this.thursday = thursday;
+    }
+
+    public void setFriday(List<Lesson> friday) {
+        this.friday = friday;
     }
 
     public List<Lesson> getFriday() {

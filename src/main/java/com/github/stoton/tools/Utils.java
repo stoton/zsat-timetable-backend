@@ -1,6 +1,7 @@
 package com.github.stoton.tools;
 
 import com.github.stoton.domain.Lesson;
+import com.github.stoton.domain.Subentry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,7 @@ public class Utils {
     }
 
     public static void addLessonToDay(List<Lesson> monday, List<Lesson> tuesday, List<Lesson> wednesday, List<Lesson> thursday, List<Lesson> friday, Lesson lesson, int choice) {
+
         switch (choice) {
             case 0:
                 monday.add(lesson);
@@ -103,6 +105,34 @@ public class Utils {
             case 4:
                 friday.add(lesson);
                 break;
+        }
+    }
+
+    public static void deleteEmptyLessonFromTop(List<Lesson> monday, List<Lesson> tuesday, List<Lesson> wednesday, List<Lesson> thursday, List<Lesson> friday) {
+
+        for(int i = monday.size()-1; i >= 0; i--) {
+            if(!monday.get(i).getSubentries().isEmpty()) break;
+            monday.remove(i);
+        }
+
+        for (int i = tuesday.size()-1; i >= 0; i--) {
+            if(!tuesday.get(i).getSubentries().isEmpty()) break;
+            tuesday.remove(i);
+        }
+
+        for(int i = wednesday.size()-1; i >= 0; i--) {
+            if(!wednesday.get(i).getSubentries().isEmpty()) break;
+            wednesday.remove(i);
+        }
+
+        for(int i = thursday.size()-1; i >= 0; i--) {
+            if(!thursday.get(i).getSubentries().isEmpty()) break;
+            thursday.remove(i);
+        }
+
+        for(int i = friday.size()-1; i >= 0; i--) {
+            if(!friday.get(i).getSubentries().isEmpty()) break;
+            friday.remove(i);
         }
     }
 }

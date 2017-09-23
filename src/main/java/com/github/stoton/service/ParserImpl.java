@@ -1,12 +1,11 @@
 package com.github.stoton.service;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.stoton.domain.DayContener;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.domain.TimetableType;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.domain.CssQuery;
-import com.github.stoton.scraper.ScraperFactory;
+import com.github.stoton.parser.ParserFactory;
 import com.github.stoton.tools.Utils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 @Service
-public class ScraperImpl implements Scraper {
+public class ParserImpl implements Parser {
 
     @Autowired
     private TimetableIndexItemRepository timetableIndexItemRepository;
@@ -41,7 +40,7 @@ public class ScraperImpl implements Scraper {
         }
 
         try {
-            return ScraperFactory.createParser(TimetableType.parseTimetableType(type))
+            return ParserFactory.createParser(TimetableType.parseTimetableType(type))
                     .parseDocument(document, timetableIndexItemRepository);
         } catch (ParseException e) {
             e.printStackTrace();
