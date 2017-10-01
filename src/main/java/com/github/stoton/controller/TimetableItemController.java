@@ -1,18 +1,13 @@
 package com.github.stoton.controller;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.github.stoton.domain.Cache;
-import com.github.stoton.domain.CacheJson;
 import com.github.stoton.domain.DayContener;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.service.Parser;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TimetableItemController {
@@ -48,7 +43,7 @@ public class TimetableItemController {
         DayContener dayContener = parser.parseDataFromZsat(url, timetableIndexItem.getType());
 
         if(dayContener != null) {
-            return ResponseEntity.ok(dayContener);
+            return ResponseEntity.ok().cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate()).body(dayContener);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,18 +63,9 @@ public class TimetableItemController {
         }
 
         if(!list.isEmpty()) {
-            return ResponseEntity.ok(list);
+            return ResponseEntity.ok().cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate()).body(list);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/timetable/cached")
-    HttpEntity<List<Cache>> cachedData() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        CacheJson jsonpObject = cacheJsonRepository.findAll().get(0);
-        List<Cache> participantJsonList = mapper.readValue(jsonpObject.getJson(), new TypeReference<List<Cache>>(){});
-        return ResponseEntity.ok(participantJsonList);
-
     }
 }

@@ -42,7 +42,7 @@ public class ParserImpl implements Parser {
         try {
             return ParserFactory.createParser(TimetableType.parseTimetableType(type))
                     .parseDocument(document, timetableIndexItemRepository);
-        } catch (ParseException e) {
+        } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
 

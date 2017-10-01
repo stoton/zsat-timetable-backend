@@ -3,10 +3,12 @@ package com.github.stoton.parser;
 import com.github.stoton.domain.*;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.tools.Utils;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.ListIterator;
 public class TeacherTimetableParser implements TimetableParser {
 
     @Override
-    public DayContener parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException {
+    public DayContener parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException {
         Elements elements = document.select(CssQuery.HTML_TABLE_CLASS.toString());
 
         List<Lesson> monday = new ArrayList<>();
@@ -34,6 +36,17 @@ public class TeacherTimetableParser implements TimetableParser {
             String timePhase = element.select(CssQuery.HOUR_CLASS.toString()).text();
 
             timePhase = timePhase.replace(" ", "").replaceAll(RegexQuery.ADD_LEADING_ZERO.toString(), "0$1");
+
+            List<String> hyperLinks = new ArrayList<>();
+            List<String> nameLinks = new ArrayList<>();
+
+
+            Elements sc = td.select("a[href^=s]");
+
+            for (Element aSc : sc) {
+                hyperLinks.add(aSc.attr("href"));
+                nameLinks.add(aSc.text());
+            }
 
 
             for (int c = 0; c < td.size(); c++) {
@@ -78,6 +91,15 @@ public class TeacherTimetableParser implements TimetableParser {
                         subentry.setSecondaryText(Utils.addSpaceToIndex(originalSecondary, 0));
 
                     subentry.setPrimaryText(primary);
+
+                    for(int cx = 0; cx < nameLinks.size(); cx++) {
+                        if(addon.contains(nameLinks.get(cx))) {
+                            Document doc = Jsoup.connect("http://szkola.zsat.linuxpl.eu/planlekcji/plany/"  + hyperLinks.get(cx)).get();
+                            addon = Utils.parseName(Utils.extractTitle(doc));
+                            break;
+                        }
+
+                    }
 
                     subentry.setAddon(addon);
                     lesson.getSubentries().add(subentry);

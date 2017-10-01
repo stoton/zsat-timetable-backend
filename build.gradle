@@ -11,15 +11,15 @@ buildscript {
 }
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'war'
+//apply plugin: 'war'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-war {
-	baseName = 'zsat-timetable-backend'
-	version = '1.0.3'
-}
+//
+//war {
+//	baseName = 'zsat-timetable-backend'
+//	version = '1.0.3'
+//}
 
 repositories {
 	mavenCentral()
@@ -37,5 +37,5 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+//	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }

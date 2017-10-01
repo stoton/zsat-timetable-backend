@@ -2,6 +2,7 @@ package com.github.stoton.tools;
 
 import com.github.stoton.domain.Lesson;
 import com.github.stoton.domain.Subentry;
+import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,5 +135,9 @@ public class Utils {
             if(!friday.get(i).getSubentries().isEmpty()) break;
             friday.remove(i);
         }
+    }
+
+    public static String extractTitle(Document document) {
+        return document.select(".tytulnapis").first().text();
     }
 }

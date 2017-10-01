@@ -4,8 +4,9 @@ import com.github.stoton.domain.DayContener;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import org.jsoup.nodes.Document;
 
+import java.io.IOException;
 import java.text.ParseException;
 
 public interface TimetableParser {
-    DayContener parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException;
+    DayContener parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException;
 }
