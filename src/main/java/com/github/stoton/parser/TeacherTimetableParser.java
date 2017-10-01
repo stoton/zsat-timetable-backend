@@ -17,7 +17,7 @@ import java.util.ListIterator;
 public class TeacherTimetableParser implements TimetableParser {
 
     @Override
-    public DayContener parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException {
+    public DayContainer parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException {
         Elements elements = document.select(CssQuery.HTML_TABLE_CLASS.toString());
 
         List<Lesson> monday = new ArrayList<>();
@@ -112,7 +112,7 @@ public class TeacherTimetableParser implements TimetableParser {
 
         Utils.deleteEmptyLessonFromTop(monday, tuesday, wednesday, thursday, friday);
 
-        return new DayContener.DayContenerBuilder()
+        return new DayContainer.DayContenerBuilder()
                 .monday(monday)
                 .tuesday(tuesday)
                 .wednesday(wednesday)

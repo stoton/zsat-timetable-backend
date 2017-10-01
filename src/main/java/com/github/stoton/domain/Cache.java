@@ -3,7 +3,7 @@ package com.github.stoton.domain;
 public class Cache {
 
     private String name;
-    private DayContener timetable;
+    private DayContainer timetable;
 
     public String getName() {
         return name;
@@ -13,11 +13,11 @@ public class Cache {
         this.name = name;
     }
 
-    public DayContener getTimetable() {
+    public DayContainer getTimetable() {
         return timetable;
     }
 
-    public void setTimetable(DayContener timetable) {
+    public void setTimetable(DayContainer timetable) {
         this.timetable = timetable;
     }
 

@@ -1,6 +1,6 @@
 package com.github.stoton.service;
 
-import com.github.stoton.domain.DayContener;
+import com.github.stoton.domain.DayContainer;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.domain.TimetableType;
 import com.github.stoton.repository.TimetableIndexItemRepository;
@@ -29,7 +29,7 @@ public class ParserImpl implements Parser {
     private TimetableIndexItemRepository timetableIndexItemRepository;
 
     @Override
-    public DayContener parseDataFromZsat(String url, String type)  {
+    public DayContainer parseDataFromZsat(String url, String type)  {
 
         Document document = null;
 

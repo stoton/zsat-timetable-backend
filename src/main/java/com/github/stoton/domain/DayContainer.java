@@ -1,9 +1,8 @@
 package com.github.stoton.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class DayContener {
+public class DayContainer {
 
     private  List<Lesson> monday;
     private  List<Lesson> tuesday;
@@ -11,10 +10,10 @@ public class DayContener {
     private  List<Lesson> thursday;
     private  List<Lesson> friday;
 
-    public DayContener() {
+    public DayContainer() {
     }
 
-    private DayContener(DayContenerBuilder builder) {
+    private DayContainer(DayContenerBuilder builder) {
         this.monday = builder.monday;
         this.tuesday = builder.tuesday;
         this.wednesday = builder.wednesday;
@@ -94,8 +93,8 @@ public class DayContener {
             return this;
         }
 
-        public DayContener build() {
-            return new DayContener(this);
+        public DayContainer build() {
+            return new DayContainer(this);
         }
 
     }
