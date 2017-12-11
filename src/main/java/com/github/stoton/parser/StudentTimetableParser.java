@@ -17,7 +17,10 @@ import java.util.ListIterator;
 public class StudentTimetableParser implements TimetableParser {
 
     @Override
-    public DayContainer parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException {
+    public CompleteTimetable parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException {
+
+        DaysEnum currentDay = DaysEnum.MONDAY;
+
         Elements elements = document.select(CssQuery.HTML_TABLE_CLASS.toString());
 
         List<Lesson> monday = new ArrayList<>();
@@ -26,12 +29,20 @@ public class StudentTimetableParser implements TimetableParser {
         List<Lesson> thursday = new ArrayList<>();
         List<Lesson> friday = new ArrayList<>();
 
+        CompleteTimetable completeTimetable = CompleteTimetable.builder()
+                .monday(monday)
+                .tuesday(tuesday)
+                .wednesday(wednesday)
+                .thursday(thursday)
+                .friday(friday)
+                .build();
+
+
         for (int x = 1; x < elements.select(CssQuery.TR_ELEMENT.toString()).size(); x++) {
 
             Element element = elements.select(CssQuery.TR_ELEMENT.toString()).get(x);
 
             Elements td = element.select(CssQuery.L_CLASS.toString());
-
 
             Elements sc = td.select("a[href^=s]");
             List<String> hyperLinks = new ArrayList<>();
@@ -46,7 +57,6 @@ public class StudentTimetableParser implements TimetableParser {
             String timePhase = element.select(CssQuery.HOUR_CLASS.toString()).text();
 
             timePhase = timePhase.replace(" ", "").replaceAll(RegexQuery.ADD_LEADING_ZERO.toString(), "0$1");
-
 
             for (int c = 0; c < td.size(); c++) {
                 List<String> secondaryText;
@@ -110,14 +120,15 @@ public class StudentTimetableParser implements TimetableParser {
                     lesson.getSubentries().add(subentry);
                 }
 
-                int choice = c % 5;
-                Utils.addLessonToDay(monday, tuesday, wednesday, thursday, friday, lesson, choice);
+                Utils.addLessonToDay(completeTimetable, lesson, currentDay);
+
+                currentDay = Utils.getNextDayOfWeek(currentDay);
             }
         }
 
-        Utils.deleteEmptyLessonFromTop(monday, tuesday, wednesday, thursday, friday);
+        Utils.deleteEmptyLessonFromTop(completeTimetable);
 
-        return new DayContainer.DayContenerBuilder()
+        return CompleteTimetable.builder()
                 .monday(monday)
                 .tuesday(tuesday)
                 .wednesday(wednesday)

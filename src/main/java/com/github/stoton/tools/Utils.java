@@ -1,11 +1,11 @@
 package com.github.stoton.tools;
 
-import com.github.stoton.domain.Lesson;
-import com.github.stoton.domain.Subentry;
+import com.github.stoton.domain.*;
 import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,56 +88,65 @@ public class Utils {
         return !(number < range);
     }
 
-    public static void addLessonToDay(List<Lesson> monday, List<Lesson> tuesday, List<Lesson> wednesday, List<Lesson> thursday, List<Lesson> friday, Lesson lesson, int choice) {
+    public static void addLessonToDay(CompleteTimetable completeTimetable, Lesson lesson, DaysEnum currentDay) {
 
-        switch (choice) {
-            case 0:
-                monday.add(lesson);
+        switch (currentDay) {
+            case MONDAY:
+                completeTimetable.getMonday().add(lesson);
                 break;
-            case 1:
-                tuesday.add(lesson);
+            case TUESDAY:
+                completeTimetable.getTuesday().add(lesson);
                 break;
-            case 2:
-                wednesday.add(lesson);
+            case WEDNESDAY:
+                completeTimetable.getWednesday().add(lesson);
                 break;
-            case 3:
-                thursday.add(lesson);
+            case THURSDAY:
+                completeTimetable.getThursday().add(lesson);
                 break;
-            case 4:
-                friday.add(lesson);
+            case FRIDAY:
+                completeTimetable.getFriday().add(lesson);
                 break;
         }
     }
 
-    public static void deleteEmptyLessonFromTop(List<Lesson> monday, List<Lesson> tuesday, List<Lesson> wednesday, List<Lesson> thursday, List<Lesson> friday) {
+    public static void deleteEmptyLessonFromTop(CompleteTimetable completeTimetable) {
 
-        for(int i = monday.size()-1; i >= 0; i--) {
-            if(!monday.get(i).getSubentries().isEmpty()) break;
-            monday.remove(i);
+        for(int i = completeTimetable.getMonday().size()-1; i >= 0; i--) {
+            if(!completeTimetable.getMonday().get(i).getSubentries().isEmpty()) break;
+            completeTimetable.getMonday().remove(i);
         }
 
-        for (int i = tuesday.size()-1; i >= 0; i--) {
-            if(!tuesday.get(i).getSubentries().isEmpty()) break;
-            tuesday.remove(i);
+        for (int i = completeTimetable.getTuesday().size()-1; i >= 0; i--) {
+            if(!completeTimetable.getTuesday().get(i).getSubentries().isEmpty()) break;
+            completeTimetable.getTuesday().remove(i);
         }
 
-        for(int i = wednesday.size()-1; i >= 0; i--) {
-            if(!wednesday.get(i).getSubentries().isEmpty()) break;
-            wednesday.remove(i);
+        for(int i = completeTimetable.getWednesday().size()-1; i >= 0; i--) {
+            if(!completeTimetable.getWednesday().get(i).getSubentries().isEmpty()) break;
+            completeTimetable.getWednesday().remove(i);
         }
 
-        for(int i = thursday.size()-1; i >= 0; i--) {
-            if(!thursday.get(i).getSubentries().isEmpty()) break;
-            thursday.remove(i);
+        for(int i = completeTimetable.getThursday().size()-1; i >= 0; i--) {
+            if(!completeTimetable.getThursday().get(i).getSubentries().isEmpty()) break;
+            completeTimetable.getThursday().remove(i);
         }
 
-        for(int i = friday.size()-1; i >= 0; i--) {
-            if(!friday.get(i).getSubentries().isEmpty()) break;
-            friday.remove(i);
+        for(int i = completeTimetable.getFriday().size()-1; i >= 0; i--) {
+            if(!completeTimetable.getFriday().get(i).getSubentries().isEmpty()) break;
+            completeTimetable.getFriday().remove(i);
         }
     }
 
     public static String extractTitle(Document document) {
         return document.select(".tytulnapis").first().text();
+    }
+
+    public static String deleteAllWhitespacesWithLeadingZero(String string) {
+        return string.replace(" ", "").replaceAll(RegexQuery.ADD_LEADING_ZERO.toString(), "0$1");
+    }
+
+    public static DaysEnum getNextDayOfWeek(DaysEnum currentDay) {
+        boolean present = currentDay.next().isPresent();
+        return present ? currentDay.next().get() : null;
     }
 }

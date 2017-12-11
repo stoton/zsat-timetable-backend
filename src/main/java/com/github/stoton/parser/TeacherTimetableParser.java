@@ -17,7 +17,10 @@ import java.util.ListIterator;
 public class TeacherTimetableParser implements TimetableParser {
 
     @Override
-    public DayContainer parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException {
+    public CompleteTimetable parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException {
+
+        DaysEnum currentDay = DaysEnum.MONDAY;
+
         Elements elements = document.select(CssQuery.HTML_TABLE_CLASS.toString());
 
         List<Lesson> monday = new ArrayList<>();
@@ -25,6 +28,14 @@ public class TeacherTimetableParser implements TimetableParser {
         List<Lesson> wednesday = new ArrayList<>();
         List<Lesson> thursday = new ArrayList<>();
         List<Lesson> friday = new ArrayList<>();
+
+        CompleteTimetable completeTimetable = CompleteTimetable.builder()
+                .monday(monday)
+                .tuesday(tuesday)
+                .wednesday(wednesday)
+                .thursday(thursday)
+                .friday(friday)
+                .build();
 
         for (int x = 1; x < elements.select(CssQuery.TR_ELEMENT.toString()).size(); x++) {
 
@@ -105,19 +116,14 @@ public class TeacherTimetableParser implements TimetableParser {
                     lesson.getSubentries().add(subentry);
                 }
 
-                int choice = c % 5;
-                Utils.addLessonToDay(monday, tuesday, wednesday, thursday, friday, lesson, choice);
+                Utils.addLessonToDay(completeTimetable, lesson, currentDay);
+                currentDay = Utils.getNextDayOfWeek(currentDay);
             }
         }
 
-        Utils.deleteEmptyLessonFromTop(monday, tuesday, wednesday, thursday, friday);
+        Utils.deleteEmptyLessonFromTop(completeTimetable);
 
-        return new DayContainer.DayContenerBuilder()
-                .monday(monday)
-                .tuesday(tuesday)
-                .wednesday(wednesday)
-                .thursday(thursday)
-                .friday(friday)
-                .build();
+
+        return completeTimetable;
     }
 }

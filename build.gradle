@@ -37,5 +37,11 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+
+	compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
+
+
+
 //	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }

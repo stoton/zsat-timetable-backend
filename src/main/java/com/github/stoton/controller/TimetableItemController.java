@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.stoton.domain.Cache;
 import com.github.stoton.domain.CacheJson;
-import com.github.stoton.domain.DayContainer;
+import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
@@ -36,7 +36,7 @@ public class TimetableItemController {
     private CacheJsonRepository cacheJsonRepository;
 
     @GetMapping("/timetable/{name:.+}")
-    HttpEntity<DayContainer> parseTimetable(@PathVariable String name) throws IOException {
+    HttpEntity<CompleteTimetable> parseTimetable(@PathVariable String name) throws IOException {
 
         TimetableIndexItem timetableIndexItem = timetableIndexItemRepository.findFirstByName(name);
 
@@ -44,10 +44,10 @@ public class TimetableItemController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         String url = "http://szkola.zsat.linuxpl.eu/planlekcji/" + timetableIndexItem.getUrl();
-        DayContainer dayContainer = parser.parseDataFromZsat(url, timetableIndexItem.getType());
+        CompleteTimetable completeTimetable = parser.parseDataFromZsat(url, timetableIndexItem.getType());
 
-        if(dayContainer != null) {
-            return ResponseEntity.ok().cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate()).body(dayContainer);
+        if(completeTimetable != null) {
+            return ResponseEntity.ok().cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate()).body(completeTimetable);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
