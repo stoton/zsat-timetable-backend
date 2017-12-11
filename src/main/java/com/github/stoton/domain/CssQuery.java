@@ -14,7 +14,8 @@ public enum CssQuery {
     N_CLASS(".n"),
     S_CLASS(".s"),
     NR_CLASS(".nr"),
-    HOUR_CLASS(".g");
+    HOUR_CLASS(".g"),
+    LINK_START_WITH_S("a[href^=s]");
 
     private final String text;
 

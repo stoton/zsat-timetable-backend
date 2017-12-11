@@ -53,16 +53,19 @@ public class StudentTimetableParser implements TimetableParser {
                 nameLinks.add(aSc.text());
             }
 
-            String nr = element.select(CssQuery.NR_CLASS.toString()).text();
+            String lessonNumber = element.select(CssQuery.NR_CLASS.toString()).text();
             String timePhase = element.select(CssQuery.HOUR_CLASS.toString()).text();
 
             timePhase = timePhase.replace(" ", "").replaceAll(RegexQuery.ADD_LEADING_ZERO.toString(), "0$1");
 
             for (int c = 0; c < td.size(); c++) {
                 List<String> secondaryText;
-                Lesson lesson = new Lesson();
-                lesson.setLessonNumber(nr);
-                lesson.setTimePhase(timePhase);
+                Lesson lesson = Lesson
+                        .builder()
+                        .lessonNumber(lessonNumber)
+                        .timePhase(timePhase)
+                        .subentries(new ArrayList<>())
+                        .build();
 
                 secondaryText = Utils.extractElementsByRegex(td.text(), RegexQuery.EXTRACT_STRING_BY_CLASS.toString());
 

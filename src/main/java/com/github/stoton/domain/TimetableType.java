@@ -25,7 +25,7 @@ public enum TimetableType {
             return CLASSROOM;
         }
 
-        throw new IllegalStateException("Unkown timetable type: " + name);
+        throw new IllegalStateException("Unknown timetable type: " + name);
     }
 
     @Override

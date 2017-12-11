@@ -28,7 +28,8 @@ public class ClassroomTimetableParser implements TimetableParser {
         List<Lesson> thursday = new ArrayList<>();
         List<Lesson> friday = new ArrayList<>();
 
-        CompleteTimetable completeTimetable = CompleteTimetable.builder()
+        CompleteTimetable completeTimetable = CompleteTimetable
+                .builder()
                 .monday(monday)
                 .tuesday(tuesday)
                 .wednesday(wednesday)
@@ -54,6 +55,7 @@ public class ClassroomTimetableParser implements TimetableParser {
                         .builder()
                         .lessonNumber(numberLesson)
                         .timePhase(timePhase)
+                        .subentries(new ArrayList<>())
                         .build();
 
                 secondaryText = Utils.extractElementsByRegex(tableCell.text(), RegexQuery.EXTRACT_STRING_BY_CLASS.toString());
@@ -91,7 +93,6 @@ public class ClassroomTimetableParser implements TimetableParser {
                     } else {
                         subentry.setAddon(Utils.addSpaceToIndex(filteredClassroom, 0));
                     }
-
                     lesson.addSubentry(subentry);
                 });
 
