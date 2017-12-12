@@ -80,7 +80,7 @@ public class TeacherTimetableParser implements TimetableParser {
 
                     String filteredStudent = candidateForStudent.orElse("");
 
-                    if ("".equals(filteredStudent)) {
+                    if (filteredStudent.isEmpty()) {
                         subentry.setSecondaryText(Utils.addSpaceToIndex(second, 0));
                     } else {
                         subentry.setSecondaryText(Utils.addSpaceToIndex(filteredStudent, 0));

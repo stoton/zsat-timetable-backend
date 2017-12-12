@@ -17,6 +17,6 @@ public class ParserFactory {
             return new TeacherTimetableParser();
         }
 
-        throw  new IllegalStateException("Unknown type: " + type);
+        throw  new IllegalArgumentException("Unknown type: " + type);
     }
 }

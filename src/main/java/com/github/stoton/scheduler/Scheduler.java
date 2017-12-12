@@ -21,6 +21,8 @@ public class Scheduler {
 
     private static final String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
 
+    private static final int TWENTY_FOUR_HOURS = 3600000 * 24;
+
     private Parser parser;
 
     private TimetableIndexItemRepository timetableIndexItemRepository;
@@ -34,7 +36,7 @@ public class Scheduler {
         this.cacheJsonRepository = cacheJsonRepository;
     }
 
-    @Scheduled(fixedDelay = 3600000 * 24, initialDelay = 1)
+    @Scheduled(fixedDelay = TWENTY_FOUR_HOURS, initialDelay = 1)
     public void collectData() {
 
         ObjectMapper mapper = new ObjectMapper();

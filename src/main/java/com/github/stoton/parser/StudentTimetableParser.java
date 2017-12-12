@@ -90,11 +90,10 @@ public class StudentTimetableParser implements TimetableParser {
                             .filter(candidate -> !Objects.equals(Utils.filter(primary, candidate), ""))
                             .findFirst();
 
-                    String filteredPrimary = candidateForSubject
-                            .orElse("");
+                    String filteredPrimary = candidateForSubject.orElse("");
 
 
-                    if("".equals(filteredPrimary)) {
+                    if(filteredPrimary.isEmpty()) {
                         subentry.setPrimaryText(primary);
                     }
                     else {

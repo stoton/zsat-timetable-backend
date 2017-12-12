@@ -88,7 +88,7 @@ public class ClassroomTimetableParser implements TimetableParser {
 
                     String filteredClassroom = candidateForClassroom.orElse("");
 
-                    if("".equals(filteredClassroom)) {
+                    if(filteredClassroom.isEmpty()) {
                         subentry.setAddon(Utils.addSpaceToIndex(classroom, 0));
                     } else {
                         subentry.setAddon(Utils.addSpaceToIndex(filteredClassroom, 0));

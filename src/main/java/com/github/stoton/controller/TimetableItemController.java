@@ -60,7 +60,7 @@ public class TimetableItemController {
     }
 
     @GetMapping("/timetable")
-    HttpEntity<List<TimetableIndexItem> > indexItems() throws IOException {
+    HttpEntity<List<TimetableIndexItem>> indexItems() throws IOException {
         List<TimetableIndexItem> list =  parser.parseDataFromZsatTimetableIndex();
 
         timetableIndexItemRepository.deleteAll();
