@@ -41,14 +41,14 @@ public class ClassroomTimetableParser implements TimetableParser {
 
         for(Element tableRow : tableRows) {
 
-            Elements tableCell = tableRow.select(CssQuery.L_CLASS.toString());
+            Elements tableCells = tableRow.select(CssQuery.L_CLASS.toString());
 
             String numberLesson = tableRow.select(CssQuery.NR_CLASS.toString()).text();
             String timePhase = tableRow.select(CssQuery.HOUR_CLASS.toString()).text();
 
             timePhase = Utils.deleteAllWhitespacesWithLeadingZero(timePhase);
 
-            for (Element tableData : table) {
+            for (Element tableData : tableCells) {
                 List<String> secondaryText;
 
                 Lesson lesson = Lesson
@@ -58,7 +58,7 @@ public class ClassroomTimetableParser implements TimetableParser {
                         .subentries(new ArrayList<>())
                         .build();
 
-                secondaryText = Utils.extractElementsByRegex(tableCell.text(), RegexQuery.EXTRACT_STRING_BY_CLASS.toString());
+                secondaryText = Utils.extractElementsByRegex(tableCells.text(), RegexQuery.EXTRACT_STRING_BY_CLASS.toString());
 
                 Elements subjects = tableData.select(CssQuery.P_CLASS.toString());
                 Elements teachers = tableData.select(CssQuery.N_CLASS.toString());

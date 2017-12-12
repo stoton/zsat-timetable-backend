@@ -1,11 +1,10 @@
-package com.github.stoton.service;
+package com.github.stoton.parser;
 
 import com.github.stoton.domain.CompleteTimetable;
+import com.github.stoton.domain.CssQuery;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.domain.TimetableType;
 import com.github.stoton.repository.TimetableIndexItemRepository;
-import com.github.stoton.domain.CssQuery;
-import com.github.stoton.parser.ParserFactory;
 import com.github.stoton.tools.Utils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,44 +13,49 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
-public class ParserImpl implements Parser {
+public class TimetableParserImpl implements Parser  {
 
-    @Autowired
+    private static String INDEX_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/lista.html";
+
     private TimetableIndexItemRepository timetableIndexItemRepository;
 
-    @Override
-    public CompleteTimetable parseDataFromZsat(String url, String type)  {
-
-        Document document = null;
-
-        try {
-            document = Jsoup.connect(url).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            return ParserFactory.createParser(TimetableType.parseTimetableType(type))
-                    .parseDocument(document, timetableIndexItemRepository);
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    @Autowired
+    public TimetableParserImpl(TimetableIndexItemRepository timetableIndexItemRepository) {
+        this.timetableIndexItemRepository = timetableIndexItemRepository;
     }
 
     @Override
+    public CompleteTimetable parseZsatDocument(String url, String type) {
+
+           Document document = null;
+
+            try {
+                document = Jsoup.connect(url).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                return ParserFactory.createParser(TimetableType.parseTimetableType(type))
+                        .parseDocument(document, timetableIndexItemRepository);
+            } catch (ParseException | IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+    @Override
     public List<TimetableIndexItem> parseDataFromZsatTimetableIndex() throws IOException {
-        String INDEX_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/lista.html";
 
         Document document = Jsoup.connect(INDEX_URL).get();
 

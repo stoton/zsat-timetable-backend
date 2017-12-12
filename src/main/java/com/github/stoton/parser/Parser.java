@@ -1,4 +1,4 @@
-package com.github.stoton.service;
+package com.github.stoton.parser;
 
 
 import com.github.stoton.domain.CompleteTimetable;
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface Parser {
-    CompleteTimetable parseDataFromZsat(String url, String type);
+    CompleteTimetable parseZsatDocument(String url, String type);
 
     List<TimetableIndexItem> parseDataFromZsatTimetableIndex() throws IOException;
 

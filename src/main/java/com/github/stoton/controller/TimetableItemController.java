@@ -9,7 +9,7 @@ import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
-import com.github.stoton.service.Parser;
+import com.github.stoton.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpEntity;
@@ -26,14 +26,20 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class TimetableItemController {
 
-    @Autowired
+    private static String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
+
     private Parser parser;
 
-    @Autowired
     private TimetableIndexItemRepository timetableIndexItemRepository;
 
-    @Autowired
     private CacheJsonRepository cacheJsonRepository;
+
+    @Autowired
+    public TimetableItemController(Parser parser, TimetableIndexItemRepository timetableIndexItemRepository, CacheJsonRepository cacheJsonRepository) {
+        this.parser = parser;
+        this.timetableIndexItemRepository = timetableIndexItemRepository;
+        this.cacheJsonRepository = cacheJsonRepository;
+    }
 
     @GetMapping("/timetable/{name:.+}")
     HttpEntity<CompleteTimetable> parseTimetable(@PathVariable String name) throws IOException {
@@ -43,8 +49,8 @@ public class TimetableItemController {
         if(timetableIndexItem == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        String url = "http://szkola.zsat.linuxpl.eu/planlekcji/" + timetableIndexItem.getUrl();
-        CompleteTimetable completeTimetable = parser.parseDataFromZsat(url, timetableIndexItem.getType());
+        String url = ROOT_URL + timetableIndexItem.getUrl();
+        CompleteTimetable completeTimetable = parser.parseZsatDocument(url, timetableIndexItem.getType());
 
         if(completeTimetable != null) {
             return ResponseEntity.ok().cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate()).body(completeTimetable);
@@ -74,7 +80,7 @@ public class TimetableItemController {
     }
 
     @GetMapping("/timetable/cached")
-    HttpEntity<List<Cache>> cachedData() throws IOException {
+    HttpEntity<List<Cache> > cachedData() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         CacheJson jsonpObject = cacheJsonRepository.findAll().get(0);
         List<Cache> participantJsonList = mapper.readValue(jsonpObject.getJson(), new TypeReference<List<Cache>>(){});

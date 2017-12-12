@@ -8,8 +8,7 @@ import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
-import com.github.stoton.service.Parser;
-import lombok.RequiredArgsConstructor;
+import com.github.stoton.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EnableScheduling
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class Scheduler {
 
     private static final String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
@@ -28,6 +26,13 @@ public class Scheduler {
     private TimetableIndexItemRepository timetableIndexItemRepository;
 
     private CacheJsonRepository cacheJsonRepository;
+
+    @Autowired
+    public Scheduler(Parser parser, TimetableIndexItemRepository timetableIndexItemRepository, CacheJsonRepository cacheJsonRepository) {
+        this.parser = parser;
+        this.timetableIndexItemRepository = timetableIndexItemRepository;
+        this.cacheJsonRepository = cacheJsonRepository;
+    }
 
     @Scheduled(fixedDelay = 3600000 * 24, initialDelay = 1)
     public void collectData() {
@@ -43,7 +48,7 @@ public class Scheduler {
                     final String url = ROOT_URL + timetableIndexItem.getUrl();
                     final String type = timetableIndexItem.getType();
 
-                    final CompleteTimetable completeTimetable = parser.parseDataFromZsat(url, type);
+                    final CompleteTimetable completeTimetable = parser.parseZsatDocument(url, type);
 
                     Cache cache = Cache.builder()
                             .name(timetableIndexItem.getName())
