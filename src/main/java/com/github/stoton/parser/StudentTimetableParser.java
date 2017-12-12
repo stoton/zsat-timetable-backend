@@ -3,16 +3,14 @@ package com.github.stoton.parser;
 import com.github.stoton.domain.*;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.tools.Utils;
-import org.jsoup.Jsoup;
+import com.google.common.collect.Iterables;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class StudentTimetableParser implements TimetableParser {
 
@@ -21,7 +19,7 @@ public class StudentTimetableParser implements TimetableParser {
 
         DaysEnum currentDay = DaysEnum.MONDAY;
 
-        Elements elements = document.select(CssQuery.HTML_TABLE_CLASS.toString());
+        Elements table = document.select(CssQuery.HTML_TABLE_CLASS.toString());
 
         List<Lesson> monday = new ArrayList<>();
         List<Lesson> tuesday = new ArrayList<>();
@@ -29,7 +27,8 @@ public class StudentTimetableParser implements TimetableParser {
         List<Lesson> thursday = new ArrayList<>();
         List<Lesson> friday = new ArrayList<>();
 
-        CompleteTimetable completeTimetable = CompleteTimetable.builder()
+        CompleteTimetable completeTimetable = CompleteTimetable
+                .builder()
                 .monday(monday)
                 .tuesday(tuesday)
                 .wednesday(wednesday)
@@ -37,28 +36,18 @@ public class StudentTimetableParser implements TimetableParser {
                 .friday(friday)
                 .build();
 
+        Iterable<Element> tableRows = Iterables.skip(table.select(CssQuery.TR_ELEMENT.toString()), 1);
 
-        for (int x = 1; x < elements.select(CssQuery.TR_ELEMENT.toString()).size(); x++) {
+        for(Element tableRow : tableRows) {
 
-            Element element = elements.select(CssQuery.TR_ELEMENT.toString()).get(x);
+            Elements tableCells = tableRow.select(CssQuery.L_CLASS.toString());
 
-            Elements td = element.select(CssQuery.L_CLASS.toString());
+            String lessonNumber = tableRow.select(CssQuery.NR_CLASS.toString()).text();
+            String timePhase = tableRow.select(CssQuery.HOUR_CLASS.toString()).text();
 
-            Elements sc = td.select("a[href^=s]");
-            List<String> hyperLinks = new ArrayList<>();
-            List<String> nameLinks = new ArrayList<>();
+            timePhase = Utils.deleteAllWhitespacesWithLeadingZero(timePhase);
 
-            for (Element aSc : sc) {
-                hyperLinks.add(aSc.attr("href"));
-                nameLinks.add(aSc.text());
-            }
-
-            String lessonNumber = element.select(CssQuery.NR_CLASS.toString()).text();
-            String timePhase = element.select(CssQuery.HOUR_CLASS.toString()).text();
-
-            timePhase = timePhase.replace(" ", "").replaceAll(RegexQuery.ADD_LEADING_ZERO.toString(), "0$1");
-
-            for (int c = 0; c < td.size(); c++) {
+            for(Element tableData : tableCells) {
                 List<String> secondaryText;
                 Lesson lesson = Lesson
                         .builder()
@@ -67,59 +56,53 @@ public class StudentTimetableParser implements TimetableParser {
                         .subentries(new ArrayList<>())
                         .build();
 
-                secondaryText = Utils.extractElementsByRegex(td.text(), RegexQuery.EXTRACT_STRING_BY_CLASS.toString());
+                secondaryText = Utils.extractElementsByRegex(tableCells.text(), RegexQuery.EXTRACT_STRING_BY_CLASS.toString());
 
-                Elements p = td.get(c).select(CssQuery.P_CLASS.toString());
-                Elements n = td.get(c).select(CssQuery.N_CLASS.toString());
-                Elements s = td.get(c).select(CssQuery.S_CLASS.toString());
+                Elements subject = tableData.select(CssQuery.P_CLASS.toString());
+                Elements teacher = tableData.select(CssQuery.N_CLASS.toString());
+                Elements classroom = tableData.select(CssQuery.S_CLASS.toString());
 
-                ListIterator<Element> addonItemsIterator = s.listIterator();
-                int j = 0;
-                for (int i = 0; i < p.size(); i++) {
+                ListIterator<Element> classroomsIterator = classroom.listIterator();
+
+                int teacherCounter = 0;
+                for (int subjectCounter = 0; subjectCounter < subject.size(); subjectCounter++) {
 
                     String primary;
                     String second;
-                    if(!Utils.isOverRange(i+1, p.size()) && p.get(i+1).text().startsWith("#")) {
-                        primary = p.get(i).text();
-                        i++;
-                        second = p.get(i).text();
+                    if(!Utils.isOverRange(subjectCounter+1, subject.size())
+                            && subject.get(subjectCounter+1).text().startsWith("#")) {
+                        primary = subject.get(subjectCounter).text();
+                        subjectCounter++;
+                        second = subject.get(subjectCounter).text();
                     } else {
-                            TimetableIndexItem timetableIndexItem = timetableIndexItemRepository.findFirstByTeacherID(n.get(j).text());
-                            primary = p.get(i).text();
+                            TimetableIndexItem timetableIndexItem = timetableIndexItemRepository.findFirstByTeacherID(teacher.get(teacherCounter).text());
+                            primary = subject.get(subjectCounter).text();
                             second = timetableIndexItem.getName();
-                            j++;
+                            teacherCounter++;
                     }
 
-                    String addon = addonItemsIterator.next().text();
+                    String addon = classroomsIterator.next().text();
 
                     Subentry subentry = new Subentry();
 
-                    String originalPrimary = "";
-                    for (String aSecondaryText : secondaryText) {
-                        originalPrimary = Utils.filter(primary, aSecondaryText);
-                        if (!originalPrimary.equals("")) {
-                            secondaryText.remove(aSecondaryText);
-                            break;
-                        }
-                    }
+                    Optional<String> candidateForSubject = secondaryText
+                            .stream()
+                            .filter(candidate -> !Objects.equals(Utils.filter(primary, candidate), ""))
+                            .findFirst();
 
-                    if(originalPrimary.equals(""))
+                    String filteredPrimary = candidateForSubject.orElse("");
+
+
+                    if(filteredPrimary.isEmpty()) {
                         subentry.setPrimaryText(primary);
-                    else
-                        subentry.setPrimaryText(originalPrimary);
+                    }
+                    else {
+                        subentry.setPrimaryText(filteredPrimary);
+                    }
 
                     subentry.setSecondaryText(second);
-
-                    for(int cx = 0; cx < nameLinks.size(); cx++) {
-                        if(addon.contains(nameLinks.get(cx))) {
-                            Document doc = Jsoup.connect("http://szkola.zsat.linuxpl.eu/planlekcji/plany/"  + hyperLinks.get(cx)).get();
-                            addon = Utils.parseName(Utils.extractTitle(doc));
-                            break;
-                        }
-
-                    }
-
                     subentry.setAddon(addon);
+
                     lesson.getSubentries().add(subentry);
                 }
 
@@ -131,7 +114,8 @@ public class StudentTimetableParser implements TimetableParser {
 
         Utils.deleteEmptyLessonFromTop(completeTimetable);
 
-        return CompleteTimetable.builder()
+        return CompleteTimetable
+                .builder()
                 .monday(monday)
                 .tuesday(tuesday)
                 .wednesday(wednesday)
