@@ -26,32 +26,14 @@ public class TimetableParserImpl implements Parser  {
 
     private static String INDEX_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/lista.html";
 
-    private TimetableIndexItemRepository timetableIndexItemRepository;
-
-    @Autowired
-    public TimetableParserImpl(TimetableIndexItemRepository timetableIndexItemRepository) {
-        this.timetableIndexItemRepository = timetableIndexItemRepository;
-    }
+    private static final String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
 
     @Override
-    public CompleteTimetable parseZsatDocument(String url, String type) {
+    public CompleteTimetable parseZsatDocument(String url, String type) throws ParseException , IOException {
+        Document document = Jsoup.connect(url).get();
 
-           Document document = null;
-
-            try {
-                document = Jsoup.connect(url).get();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                return ParserFactory.createParser(TimetableType.parseTimetableType(type))
-                        .parseDocument(document, timetableIndexItemRepository);
-            } catch (ParseException | IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
+        return ParserFactory.createParser(TimetableType.parseTimetableType(type))
+                        .parseDocument(document);
         }
 
     @Override
@@ -89,7 +71,8 @@ public class TimetableParserImpl implements Parser  {
         for(Element e : elements) {
             String name = Utils.parseName(e.text());
 
-            TimetableIndexItem indexItem = new TimetableIndexItem(name, category, iterator.next());
+            String link = iterator.next();
+            TimetableIndexItem indexItem = new TimetableIndexItem(name, category, link, ROOT_URL + link);
 
             if(category.equals("TEACHER")) {
                 String teacherID;

@@ -7,16 +7,26 @@ import com.google.common.collect.Iterables;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.*;
 
-@Component
+@Service
 public class ClassroomTimetableParser implements TimetableParser {
 
+    @Autowired
+    private TimetableIndexItemRepository timetableIndexItemRepository;
+
     @Override
-    public CompleteTimetable parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException {
+    public TimetableType getType() {
+        return TimetableType.CLASSROOM;
+    }
+
+    @Override
+    public CompleteTimetable parseDocument(Document document) throws ParseException {
 
         DaysEnum currentDay = DaysEnum.MONDAY;
 

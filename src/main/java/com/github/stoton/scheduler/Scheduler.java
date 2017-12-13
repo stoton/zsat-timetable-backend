@@ -10,13 +10,15 @@ import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-@EnableScheduling
+@Component
 public class Scheduler {
 
     private static final String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
@@ -39,6 +41,7 @@ public class Scheduler {
     @Scheduled(fixedDelay = TWENTY_FOUR_HOURS, initialDelay = 1)
     public void collectData() {
 
+
         ObjectMapper mapper = new ObjectMapper();
 
         List<TimetableIndexItem> timetableIndexItems = timetableIndexItemRepository.findAll();
@@ -50,7 +53,12 @@ public class Scheduler {
                     final String url = ROOT_URL + timetableIndexItem.getUrl();
                     final String type = timetableIndexItem.getType();
 
-                    final CompleteTimetable completeTimetable = parser.parseZsatDocument(url, type);
+                    CompleteTimetable completeTimetable = null;
+                    try {
+                        completeTimetable = parser.parseZsatDocument(url, type);
+                    } catch (ParseException | IOException e) {
+                        e.printStackTrace();
+                    }
 
                     Cache cache = Cache.builder()
                             .name(timetableIndexItem.getName())
@@ -59,6 +67,7 @@ public class Scheduler {
 
                     caches.add(cache);
                 });
+
 
         CacheJson cacheJson = new CacheJson();
 

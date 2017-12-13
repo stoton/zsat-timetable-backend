@@ -41,7 +41,5 @@ dependencies {
 
 	compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
 
-
-
 //	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }

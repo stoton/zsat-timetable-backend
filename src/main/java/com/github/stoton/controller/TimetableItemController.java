@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +43,7 @@ public class TimetableItemController {
     }
 
     @GetMapping("/timetable/{name:.+}")
-    HttpEntity<CompleteTimetable> parseTimetable(@PathVariable String name) throws IOException {
+    HttpEntity<CompleteTimetable> parseTimetable(@PathVariable String name) throws IOException, ParseException {
 
         TimetableIndexItem timetableIndexItem = timetableIndexItemRepository.findFirstByName(name);
 

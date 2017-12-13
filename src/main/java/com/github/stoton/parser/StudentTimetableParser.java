@@ -4,18 +4,32 @@ import com.github.stoton.domain.*;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.tools.Utils;
 import com.google.common.collect.Iterables;
+import org.aspectj.lang.annotation.Aspect;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
+@Service
 public class StudentTimetableParser implements TimetableParser {
 
+    @Autowired
+    private TimetableIndexItemRepository timetableIndexItemRepository;
+
     @Override
-    public CompleteTimetable parseDocument(Document document, TimetableIndexItemRepository timetableIndexItemRepository) throws ParseException, IOException {
+    public TimetableType getType() {
+        return TimetableType.STUDENT;
+    }
+
+    @Override
+    public CompleteTimetable parseDocument(Document document) throws ParseException, IOException {
 
         DaysEnum currentDay = DaysEnum.MONDAY;
 

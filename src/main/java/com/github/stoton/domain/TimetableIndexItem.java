@@ -20,17 +20,21 @@ public class TimetableIndexItem {
     private Long id;
 
     private String name;
+
+    private String link;
     private String type;
 
     @JsonIgnore
     private String url;
 
+
     @JsonIgnore
     private String teacherID;
 
-    public TimetableIndexItem(String name, String type, String url) {
+    public TimetableIndexItem(String name, String type, String url, String link) {
         this.name = name;
         this.type = type;
         this.url = url;
+        this.link = link;
     }
 }
