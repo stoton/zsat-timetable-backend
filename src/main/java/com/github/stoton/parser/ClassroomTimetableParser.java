@@ -17,8 +17,12 @@ import java.util.*;
 @Service
 public class ClassroomTimetableParser implements TimetableParser {
 
-    @Autowired
     private TimetableIndexItemRepository timetableIndexItemRepository;
+
+    @Autowired
+    public ClassroomTimetableParser(TimetableIndexItemRepository timetableIndexItemRepository) {
+        this.timetableIndexItemRepository = timetableIndexItemRepository;
+    }
 
     @Override
     public TimetableType getType() {

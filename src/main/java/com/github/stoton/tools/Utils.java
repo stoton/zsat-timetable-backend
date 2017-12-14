@@ -28,11 +28,11 @@ public class Utils {
         return name;
     }
 
-    private static String removeHtmlTags(String string) {
+    public static String removeHtmlTags(String string) {
         return string.replaceAll("<[\\w/]*>", "");
     }
 
-    private static String deleteTextWithinBrackets(String str) {
+    public static String deleteTextWithinBrackets(String str) {
         if (str.isEmpty() || Character.isDigit(str.charAt(0))) {
             return str;
         }
@@ -46,12 +46,12 @@ public class Utils {
         return str;
     }
 
-    private static boolean startsWithUppercaseAndDot(String string) {
+    public static boolean startsWithUppercaseAndDot(String string) {
         String regex = "^([A-Z]|[ĄĆĘŁŃÓŚŻŹ])(\\.)(.)*$";
         return string.matches(regex);
     }
 
-    private static boolean startsWithOneDigit(String string) {
+    public static boolean startsWithOneDigit(String string) {
         String regex = "^(\\d)(\\D)(.)*$";
         return string.matches(regex);
     }
@@ -134,10 +134,6 @@ public class Utils {
             if(!completeTimetable.getFriday().get(i).getSubentries().isEmpty()) break;
             completeTimetable.getFriday().remove(i);
         }
-    }
-
-    public static String extractTitle(Document document) {
-        return document.select(".tytulnapis").first().text();
     }
 
     public static String deleteAllWhitespacesWithLeadingZero(String string) {

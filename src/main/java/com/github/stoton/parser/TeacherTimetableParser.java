@@ -8,7 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,8 +17,12 @@ import java.util.*;
 @Service
 public class TeacherTimetableParser implements TimetableParser {
 
-    @Autowired
     private TimetableIndexItemRepository timetableIndexItemRepository;
+
+    @Autowired
+    public TeacherTimetableParser(TimetableIndexItemRepository timetableIndexItemRepository) {
+        this.timetableIndexItemRepository = timetableIndexItemRepository;
+    }
 
     @Override
     public TimetableType getType() {

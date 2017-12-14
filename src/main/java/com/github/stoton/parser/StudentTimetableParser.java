@@ -20,8 +20,12 @@ import java.util.*;
 @Service
 public class StudentTimetableParser implements TimetableParser {
 
-    @Autowired
     private TimetableIndexItemRepository timetableIndexItemRepository;
+
+    @Autowired
+    public StudentTimetableParser(TimetableIndexItemRepository timetableIndexItemRepository) {
+        this.timetableIndexItemRepository = timetableIndexItemRepository;
+    }
 
     @Override
     public TimetableType getType() {

@@ -2,13 +2,13 @@ package com.github.stoton.parser;
 
 import com.github.stoton.domain.TimetableType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ParserFactory {
@@ -19,7 +19,7 @@ public class ParserFactory {
     private static final Map<TimetableType, TimetableParser> parsersCache = new HashMap<>();
 
     @PostConstruct
-    public void initMyServiceCache() {
+    public void initParsersCache() {
         for(TimetableParser service : parsers) {
             parsersCache.put(service.getType(), service);
         }
@@ -27,10 +27,11 @@ public class ParserFactory {
 
     public static TimetableParser createParser(TimetableType type) {
 
-        TimetableParser parser = parsersCache.get(type);
+        Optional<TimetableParser> parser = Optional.ofNullable(parsersCache.get(type));
 
-        if(parser != null)
-            return parser;
+        if(parser.isPresent()) {
+            return parser.get();
+        }
 
         throw new IllegalArgumentException("Unknown type: " + type);
     }
