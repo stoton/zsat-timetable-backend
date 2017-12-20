@@ -1,6 +1,5 @@
 package com.github.stoton.controller;
 
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.stoton.domain.Cache;
@@ -22,12 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TimetableItemController {
 
-    private static String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
+    private final static String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
 
     private Parser parser;
 
@@ -42,49 +42,63 @@ public class TimetableItemController {
         this.cacheJsonRepository = cacheJsonRepository;
     }
 
-    @GetMapping("/timetable/{name:.+}")
+    @GetMapping(value = "/timetable/{name:.+}", produces = "application/json")
     HttpEntity<CompleteTimetable> parseTimetable(@PathVariable String name) throws IOException, ParseException {
 
-        TimetableIndexItem timetableIndexItem = timetableIndexItemRepository.findFirstByName(name);
+        Optional<TimetableIndexItem> timetableIndexItem = Optional.ofNullable(timetableIndexItemRepository.findFirstByName(name));
 
-        if(timetableIndexItem == null)
+        if(!timetableIndexItem.isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        String url = ROOT_URL + timetableIndexItem.getUrl();
-        CompleteTimetable completeTimetable = parser.parseZsatDocument(url, timetableIndexItem.getType());
+        String url = ROOT_URL + timetableIndexItem.get().getUrl();
 
-        if(completeTimetable != null) {
-            return ResponseEntity.ok().cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate()).body(completeTimetable);
-        }
+        Optional<CompleteTimetable> completeTimetable = Optional.ofNullable(parser.parseZsatDocument(url, timetableIndexItem.get().getType()));
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return completeTimetable.<HttpEntity<CompleteTimetable>>
+                    map(timetable -> ResponseEntity.ok()
+                    .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS)
+                    .cachePrivate())
+                    .body(timetable))
+                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/timetable")
-    HttpEntity<List<TimetableIndexItem>> indexItems() throws IOException {
-        List<TimetableIndexItem> list =  parser.parseDataFromZsatTimetableIndex();
+    @GetMapping(value = "/timetable", produces = "application/json")
+    HttpEntity<List<TimetableIndexItem>> getTimetableIndexItems() throws IOException {
+        List<TimetableIndexItem> timetableIndexItems = parser.parseDataFromZsatTimetableIndex();
 
         timetableIndexItemRepository.deleteAll();
 
-        for(TimetableIndexItem t : list) {
-            TimetableIndexItem current = timetableIndexItemRepository.findFirstByName(t.getName());
-            if(current == null) {
-                timetableIndexItemRepository.save(t);
+        for(TimetableIndexItem timetableIndexItem : timetableIndexItems) {
+            Optional<TimetableIndexItem> current = Optional.ofNullable(timetableIndexItemRepository.findFirstByName(timetableIndexItem.getName()));
+
+            if(!current.isPresent()) {
+                timetableIndexItemRepository.save(timetableIndexItem);
             }
         }
 
-        if(!list.isEmpty()) {
-            return ResponseEntity.ok().cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate()).body(list);
+        if(!timetableIndexItems.isEmpty()) {
+            return ResponseEntity.ok()
+                    .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate())
+                    .body(timetableIndexItems);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/timetable/cached")
-    HttpEntity<List<Cache> > cachedData() throws IOException {
+    @GetMapping(value = "/timetable/cached", produces = "application/json")
+    HttpEntity<List<Cache>> cachedData() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        CacheJson jsonpObject = cacheJsonRepository.findAll().get(0);
-        List<Cache> participantJsonList = mapper.readValue(jsonpObject.getJson(), new TypeReference<List<Cache>>(){});
-        return ResponseEntity.ok().cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate()).body(participantJsonList);
+
+        Optional<CacheJson> cache = cacheJsonRepository.findAll()
+                .stream()
+                .findFirst();
+
+        if(cache.isPresent()) {
+            List<Cache> participantJsonList = mapper.readValue(cache.get().getJson(), new TypeReference<List<Cache>>(){});
+            return ResponseEntity.ok()
+                    .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate())
+                    .body(participantJsonList);
+        } else {
+            return null;
+        }
     }
 }

@@ -67,8 +67,7 @@ public class Scheduler {
 
                     caches.add(cache);
                 });
-
-
+        
         CacheJson cacheJson = new CacheJson();
 
         try {
