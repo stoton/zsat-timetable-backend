@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableSpringConfigured
 public class App {
 
+
+//
 //    @Override
 //    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 //        return builder.sources(App.class);
@@ -18,4 +20,5 @@ public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
+
 }

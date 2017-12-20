@@ -219,9 +219,9 @@ public class UtilsTest {
                 .getMonday()
                 .size();
 
-        int expceted = 1;
+        int expected = 1;
 
-        assertEquals(expceted, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
