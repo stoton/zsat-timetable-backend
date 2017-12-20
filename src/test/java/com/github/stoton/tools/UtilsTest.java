@@ -1,3 +1,5 @@
+package com.github.stoton.tools;
+
 import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.DaysEnum;
 import com.github.stoton.domain.Lesson;

@@ -41,7 +41,6 @@ public class Scheduler {
     @Scheduled(fixedDelay = TWENTY_FOUR_HOURS, initialDelay = 1)
     public void collectData() {
 
-
         ObjectMapper mapper = new ObjectMapper();
 
         List<TimetableIndexItem> timetableIndexItems = timetableIndexItemRepository.findAll();
@@ -67,7 +66,7 @@ public class Scheduler {
 
                     caches.add(cache);
                 });
-        
+
         CacheJson cacheJson = new CacheJson();
 
         try {

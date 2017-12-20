@@ -27,7 +27,6 @@ public class TimetableIndexItem {
     @JsonIgnore
     private String url;
 
-
     @JsonIgnore
     private String teacherID;
 

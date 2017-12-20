@@ -4,13 +4,11 @@ import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.CssQuery;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.domain.TimetableType;
-import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.tools.Utils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -43,7 +41,7 @@ public class TimetableParserImpl implements Parser  {
 
         List<TimetableIndexItem> items = new ArrayList<>();
 
-        Elements elements = document.select(CssQuery.ALL_ELEMENTS_FROM_H4.toString());
+        Elements elements = document.select(CssQuery.ALL_ELEMENTS_FROM_H4_WITH_UL_DESCENDANT.toString());
 
         Elements classes = elements.select(CssQuery.CLASSES_ELEMENTS_FROM_PAGE.toString());
         Elements teachers = elements.select(CssQuery.TEACHERS_ELEMENTS_FROM_PAGE.toString());
@@ -51,7 +49,7 @@ public class TimetableParserImpl implements Parser  {
 
         List<String> urls = new ArrayList<>();
 
-        Elements urlsElements = elements.select(CssQuery.URLS.toString());
+        Elements urlsElements = elements.select(CssQuery.LINKS_IN_A_LIST.toString());
 
         for(Element e : urlsElements) {
             urls.add(e.attr("href"));

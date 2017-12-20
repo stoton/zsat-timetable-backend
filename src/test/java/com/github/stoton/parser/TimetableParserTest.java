@@ -1,3 +1,6 @@
+package com.github.stoton.parser.test;
+
+
 import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.Lesson;
 import com.github.stoton.domain.Subentry;
@@ -54,13 +57,14 @@ public class TimetableParserTest {
         CompleteTimetable expected = CompleteTimetable
                 .builder()
                 .monday(new ArrayList<>(Collections.singletonList(mondayLesson)))
-                .tuesday(new ArrayList<>())
-                .wednesday(new ArrayList<>())
-                .thursday(new ArrayList<>())
-                .friday(new ArrayList<>())
+                .tuesday(Collections.emptyList())
+                .wednesday(Collections.emptyList())
+                .thursday(Collections.emptyList())
+                .friday(Collections.emptyList())
                 .build();
 
-        InputStream file = this.getClass().getResourceAsStream("correctTeacherTimetable.html");
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream file = classLoader.getResourceAsStream("correctTeacherTimetable.html");
 
         String html = CharStreams.toString(new InputStreamReader(
                 file, Charsets.UTF_8));
@@ -94,13 +98,14 @@ public class TimetableParserTest {
         CompleteTimetable expected = CompleteTimetable
                 .builder()
                 .monday(new ArrayList<>(Collections.singletonList(mondayLesson)))
-                .tuesday(new ArrayList<>())
-                .wednesday(new ArrayList<>())
-                .thursday(new ArrayList<>())
-                .friday(new ArrayList<>())
+                .tuesday(Collections.emptyList())
+                .wednesday(Collections.emptyList())
+                .thursday(Collections.emptyList())
+                .friday(Collections.emptyList())
                 .build();
 
-        InputStream file = this.getClass().getResourceAsStream("correctStudentTimetable.html");
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream file = classLoader.getResourceAsStream("correctStudentTimetable.html");
 
         String html = CharStreams.toString(new InputStreamReader(
                 file, Charsets.UTF_8));
@@ -135,13 +140,14 @@ public class TimetableParserTest {
         CompleteTimetable expected = CompleteTimetable
                 .builder()
                 .monday(new ArrayList<>(Collections.singletonList(lesson)))
-                .tuesday(new ArrayList<>())
-                .wednesday(new ArrayList<>())
-                .thursday(new ArrayList<>())
-                .friday(new ArrayList<>())
+                .tuesday(Collections.emptyList())
+                .wednesday(Collections.emptyList())
+                .thursday(Collections.emptyList())
+                .friday(Collections.emptyList())
                 .build();
 
-        InputStream file = this.getClass().getResourceAsStream("correctClassroomTimetable.html");
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream file = classLoader.getResourceAsStream("correctClassroomTimetable.html");
 
         String html = CharStreams.toString(new InputStreamReader(
                 file, Charsets.UTF_8));
