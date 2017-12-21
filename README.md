@@ -10,3 +10,4 @@ Project based on Spring boot in version 1.5.6 and Hibernate 5, also using lombok
 
 There is available api - just click this link: http://timetable.shemhazai.com:8080/swagger-ui.html
 
+
