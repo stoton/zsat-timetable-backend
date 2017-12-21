@@ -2,9 +2,11 @@
 
 RESTful service for: <a href="https://play.google.com/store/apps/details?id=shemhazai.github.com.timetable&hl=pl">mobile app</a>
 
+The main task of the service is to provide data from ZSA-T`s timetable when client needs that.
+
 its mainly task is providing data from <a href="http://szkola.zsat.linuxpl.eu/planlekcji/index.html"> ZSA-T's timetable </a> when client needs.
 
-Once per day it's parsing whole timetable and collect into database. And that's why client is easily able to get and construct his no matter for server things.
+Once a day it parses the whole timetable and puts it into a database. And that's why client is easily able to get the data and construct whathever he wants.
 
 Project based on Spring boot in version 1.5.6 and Hibernate 5, also using lombok and Jsoup for html documents parsing. Tests were written in Junit and Mockito.
 
