@@ -10,12 +10,11 @@ import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -42,8 +41,8 @@ public class TimetableItemController {
         this.cacheJsonRepository = cacheJsonRepository;
     }
 
-    @GetMapping(value = "/timetable/{name:.+}", produces = "application/json")
-    HttpEntity<CompleteTimetable> parseTimetable(@PathVariable String name) throws IOException, ParseException {
+    @GetMapping(value = "/timetable/{name:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<CompleteTimetable> parseTimetable(@PathVariable String name) throws IOException, ParseException {
 
         Optional<TimetableIndexItem> timetableIndexItem = Optional.ofNullable(timetableIndexItemRepository.findFirstByName(name));
 
@@ -62,8 +61,8 @@ public class TimetableItemController {
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(value = "/timetable", produces = "application/json")
-    HttpEntity<List<TimetableIndexItem>> getTimetableIndexItems() throws IOException {
+    @GetMapping(value = "/timetable", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<List<TimetableIndexItem>> getTimetableIndexItems() throws IOException {
         List<TimetableIndexItem> timetableIndexItems = parser.parseDataFromZsatTimetableIndex();
 
         timetableIndexItemRepository.deleteAll();
@@ -84,8 +83,8 @@ public class TimetableItemController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/timetable/cached", produces = "application/json")
-    HttpEntity<List<Cache>> cachedData() throws IOException {
+    @GetMapping(value = "/timetable/cached", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpEntity<List<Cache>> cachedData() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
         Optional<CacheJson> cache = cacheJsonRepository.findAll()
