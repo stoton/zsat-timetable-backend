@@ -1,6 +1,6 @@
 # zsat-timetable-backend
 
-RESTful service for: <a href="https://play.google.com/store/apps/details?id=shemhazai.github.com.timetable&hl=pl">api</a>
+RESTful service for: <a href="https://play.google.com/store/apps/details?id=shemhazai.github.com.timetable&hl=pl">mobile app</a>
 
 its mainly task is providing data from <a href="http://szkola.zsat.linuxpl.eu/planlekcji/index.html"> ZSA-T's timetable </a> when client needs.
 
