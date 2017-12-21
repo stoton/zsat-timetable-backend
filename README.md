@@ -2,7 +2,7 @@
 
 RESTful service for: <a href="https://play.google.com/store/apps/details?id=shemhazai.github.com.timetable&hl=pl">mobile app</a>
 
-The main idea of the service is to provide data from <a href="http://szkola.zsat.linuxpl.eu/planlekcji/index.html"> ZSA-T's timetable </a> when client needs that.
+The main idea of the service is to provide data from <a href="http://szkola.zsat.linuxpl.eu/planlekcji/index.html"> ZSA-T's timetable </a> whenever client needs that.
 
 Once a day it parses the whole timetable and puts it into a database. And that's why client is easily able to get the data and construct whathever he wants.
 
