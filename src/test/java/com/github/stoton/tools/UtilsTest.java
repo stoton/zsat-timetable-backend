@@ -127,7 +127,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void addSpaceToIndexWhenIndexIsNotInRange() {
+    public void addSpaceToIndexWhenIndexIsNotInRangeTest() {
         String given = "testcase";
 
         String actual = Utils.addSpaceToIndex(given, -1);
@@ -138,7 +138,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void extractElementsByRegexWithDigits() {
+    public void extractElementsByRegexWithDigitsTest() {
         String given =  "12ad4n23";
 
         List<String> actual = Utils.extractElementsByRegex(given, "\\d");
@@ -149,7 +149,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void extractElementsByRegexWithNumbers() {
+    public void extractElementsByRegexWithNumbersTest() {
         String given = "12ad4n23";
 
         List<String> actual = Utils.extractElementsByRegex(given, "[0-9]+");
@@ -160,7 +160,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void extractElementsByRegexWithSomeWhitespaces() {
+    public void extractElementsByRegexWithSomeWhitespacesTest() {
         String given = "Ala ma kota a kot   ma  Ale";
 
         List<String> actual = Utils.extractElementsByRegex(given, "[a-zA-Z]+");
@@ -271,7 +271,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void deleteEmptyLessonFromTopWhenNoneExists() {
+    public void deleteEmptyLessonFromTopWhenNoneExistsTest() {
         List<Subentry> mondayFirstSubentry = new ArrayList<>();
 
         List<Subentry> mondaySecondSubentry = new ArrayList<>();

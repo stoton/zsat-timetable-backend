@@ -9,6 +9,7 @@ import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.parser.Parser;
+import com.github.stoton.tools.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -25,8 +26,6 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TimetableItemController {
-
-    private final static String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
 
     private Parser parser;
 
@@ -49,7 +48,7 @@ public class TimetableItemController {
         if(!timetableIndexItem.isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        String url = ROOT_URL + timetableIndexItem.get().getUrl();
+        String url = AppProperties.ZSAT_TIMETABLE_ROOT_URL + timetableIndexItem.get().getUrl();
 
         Optional<CompleteTimetable> completeTimetable = Optional.ofNullable(parser.parseZsatDocument(url, timetableIndexItem.get().getType()));
 

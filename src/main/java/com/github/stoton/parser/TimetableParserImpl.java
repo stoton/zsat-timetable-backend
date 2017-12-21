@@ -4,6 +4,7 @@ import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.CssQuery;
 import com.github.stoton.domain.TimetableIndexItem;
 import com.github.stoton.domain.TimetableType;
+import com.github.stoton.tools.AppProperties;
 import com.github.stoton.tools.Utils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,10 +23,6 @@ import java.util.regex.Pattern;
 @Service
 public class TimetableParserImpl implements Parser  {
 
-    private static String INDEX_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/lista.html";
-
-    private static final String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
-
     @Override
     public CompleteTimetable parseZsatDocument(String url, String type) throws ParseException , IOException {
         Document document = Jsoup.connect(url).get();
@@ -37,7 +34,7 @@ public class TimetableParserImpl implements Parser  {
     @Override
     public List<TimetableIndexItem> parseDataFromZsatTimetableIndex() throws IOException {
 
-        Document document = Jsoup.connect(INDEX_URL).get();
+        Document document = Jsoup.connect(AppProperties.ZSAT_TIMETABLE_INDEX_URL).get();
 
         List<TimetableIndexItem> items = new ArrayList<>();
 
@@ -70,7 +67,7 @@ public class TimetableParserImpl implements Parser  {
             String name = Utils.parseName(e.text());
 
             String link = iterator.next();
-            TimetableIndexItem indexItem = new TimetableIndexItem(name, category, link, ROOT_URL + link);
+            TimetableIndexItem indexItem = new TimetableIndexItem(name, category, link, AppProperties.ZSAT_TIMETABLE_ROOT_URL + link);
 
             if(category.equals("TEACHER")) {
                 String teacherID;

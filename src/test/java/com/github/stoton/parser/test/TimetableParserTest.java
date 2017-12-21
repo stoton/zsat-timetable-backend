@@ -41,7 +41,7 @@ public class TimetableParserTest {
     @Test
     public void teacherParserTestWhenDocumentIsCorrect() throws IOException, ParseException {
 
-        timetableParser = new TeacherTimetableParser(timetableIndexItemRepository);
+        timetableParser = new TeacherTimetableParser();
 
         List<Subentry> mondaySubentries = new ArrayList<>();
 

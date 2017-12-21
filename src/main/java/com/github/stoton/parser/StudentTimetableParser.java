@@ -4,13 +4,10 @@ import com.github.stoton.domain.*;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.tools.Utils;
 import com.google.common.collect.Iterables;
-import org.aspectj.lang.annotation.Aspect;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
