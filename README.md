@@ -6,7 +6,7 @@ The main idea of the service is to provide data from <a href="http://szkola.zsat
 
 Once a day it parses the whole timetable and puts it into a database. And that's why client is easily able to get the data and construct whathever he wants.
 
-Project based on Spring boot in version 1.5.6 and Hibernate 5, also using lombok and Jsoup for html documents parsing. Tests were written in Junit and Mockito.
+Project based on Spring boot in version 1.5.6, Hibernate 5 and Lombok. Jsoup was used for parsing of the html documents. Tests were written in Junit and Mockito.
 
 There is available api - just click this link: http://timetable.shemhazai.com:8080/swagger-ui.html
 
