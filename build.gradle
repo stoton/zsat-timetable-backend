@@ -15,7 +15,7 @@ apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
+//
 //war {
 //	baseName = 'zsat-timetable-backend'
 //	version = '1.0.3'
@@ -39,11 +39,9 @@ dependencies {
 	compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
 
-
 	compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.6.1'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.6.1'
-
 
 //	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
