@@ -25,6 +25,8 @@ public class Scheduler {
 
     private static final int TWENTY_FOUR_HOURS = 3600000 * 24;
 
+    private static final int ONE_SECOND = 1;
+
     private Parser parser;
 
     private TimetableIndexItemRepository timetableIndexItemRepository;
@@ -38,7 +40,7 @@ public class Scheduler {
         this.cacheJsonRepository = cacheJsonRepository;
     }
 
-    @Scheduled(fixedDelay = TWENTY_FOUR_HOURS, initialDelay = 1)
+    @Scheduled(fixedDelay = TWENTY_FOUR_HOURS, initialDelay = ONE_SECOND)
     public void collectData() {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -47,25 +49,24 @@ public class Scheduler {
 
         List<Cache> caches = new ArrayList<>();
 
-        timetableIndexItems
-                .forEach(timetableIndexItem -> {
-                    final String url = ROOT_URL + timetableIndexItem.getUrl();
-                    final String type = timetableIndexItem.getType();
+        for(TimetableIndexItem timetableIndexItem : timetableIndexItems) {
+            final String url = ROOT_URL + timetableIndexItem.getUrl();
+            final String type = timetableIndexItem.getType();
 
-                    CompleteTimetable completeTimetable = null;
-                    try {
-                        completeTimetable = parser.parseZsatDocument(url, type);
-                    } catch (ParseException | IOException e) {
-                        e.printStackTrace();
-                    }
+            CompleteTimetable completeTimetable = null;
+            try {
+                completeTimetable = parser.parseZsatDocument(url, type);
+            } catch (ParseException | IOException e) {
+                e.printStackTrace();
+            }
 
-                    Cache cache = Cache.builder()
-                            .name(timetableIndexItem.getName())
-                            .timetable(completeTimetable)
-                            .build();
+            Cache cache = Cache.builder()
+                    .name(timetableIndexItem.getName())
+                    .timetable(completeTimetable)
+                    .build();
 
-                    caches.add(cache);
-                });
+            caches.add(cache);
+        }
 
         CacheJson cacheJson = new CacheJson();
 

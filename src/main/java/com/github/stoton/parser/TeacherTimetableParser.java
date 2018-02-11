@@ -1,17 +1,13 @@
 package com.github.stoton.parser;
 
 import com.github.stoton.domain.*;
-import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.tools.Utils;
 import com.google.common.collect.Iterables;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.*;
 
 @Service
@@ -23,7 +19,7 @@ public class TeacherTimetableParser implements TimetableParser {
     }
 
     @Override
-    public CompleteTimetable parseDocument(Document document) throws ParseException, IOException {
+    public CompleteTimetable parseDocument(Document document) {
 
         DaysEnum currentDay = DaysEnum.MONDAY;
 
@@ -100,8 +96,11 @@ public class TeacherTimetableParser implements TimetableParser {
                     lesson.getSubentries().add(subentry);
                 });
 
-                Utils.addLessonToDay(completeTimetable, lesson, currentDay);
-                currentDay = Utils.getNextDayOfWeek(currentDay);
+                if (currentDay != null) {
+                    Utils.addLessonToDay(completeTimetable, lesson, currentDay);
+                    currentDay = Utils.getNextDayOfWeek(currentDay);
+                }
+
             }
         }
 

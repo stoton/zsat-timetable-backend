@@ -30,7 +30,7 @@ public class ClassroomTimetableParser implements TimetableParser {
     }
 
     @Override
-    public CompleteTimetable parseDocument(Document document) throws ParseException {
+    public CompleteTimetable parseDocument(Document document) {
 
         DaysEnum currentDay = DaysEnum.MONDAY;
 
@@ -110,9 +110,10 @@ public class ClassroomTimetableParser implements TimetableParser {
                     lesson.addSubentry(subentry);
                 });
 
-                Utils.addLessonToDay(completeTimetable, lesson, currentDay);
-
-                currentDay = Utils.getNextDayOfWeek(currentDay);
+                if (currentDay != null) {
+                    Utils.addLessonToDay(completeTimetable, lesson, currentDay);
+                    currentDay = Utils.getNextDayOfWeek(currentDay);
+                }
             }
         }
 
