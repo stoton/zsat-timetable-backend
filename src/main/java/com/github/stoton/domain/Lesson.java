@@ -2,10 +2,6 @@ package com.github.stoton.domain;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import org.springframework.context.annotation.Bean;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

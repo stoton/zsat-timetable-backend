@@ -10,7 +10,7 @@ import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
 import com.github.stoton.parser.Parser;
 import com.github.stoton.tools.AppProperties;
-import io.reactivex.Observable;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -100,4 +100,5 @@ public class TimetableItemController {
 
         }
     }
+
 }
