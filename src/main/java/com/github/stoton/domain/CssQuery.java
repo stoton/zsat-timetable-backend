@@ -1,6 +1,10 @@
 package com.github.stoton.domain;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum CssQuery {
+
     ALL_ELEMENTS_FROM_H4_WITH_UL_DESCENDANT("h4 + ul"),
     CLASSES_ELEMENTS_FROM_PAGE("ul > li > a[href^=plany/o]"),
     TEACHERS_ELEMENTS_FROM_PAGE("ul > li > a[href^=plany/n]"),
@@ -17,10 +21,6 @@ public enum CssQuery {
     HOUR_CLASS(".g");
 
     private final String text;
-
-    CssQuery(final String text) {
-        this.text = text;
-    }
 
     @Override
     public String toString() {

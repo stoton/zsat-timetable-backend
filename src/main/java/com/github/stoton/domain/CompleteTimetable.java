@@ -9,9 +9,9 @@ import java.util.List;
 @Builder
 public class CompleteTimetable {
 
-    private  List<Lesson> monday;
-    private  List<Lesson> tuesday;
-    private  List<Lesson> wednesday;
-    private  List<Lesson> thursday;
-    private  List<Lesson> friday;
+    private List<Lesson> monday;
+    private List<Lesson> tuesday;
+    private List<Lesson> wednesday;
+    private List<Lesson> thursday;
+    private List<Lesson> friday;
 }

@@ -20,7 +20,7 @@ public class ParserFactory {
 
     @PostConstruct
     public void initParsersCache() {
-        for(TimetableParser service : parsers) {
+        for (TimetableParser service : parsers) {
             parsersCache.put(service.getType(), service);
         }
     }
@@ -29,7 +29,7 @@ public class ParserFactory {
 
         Optional<TimetableParser> parser = Optional.ofNullable(parsersCache.get(type));
 
-        if(parser.isPresent()) {
+        if (parser.isPresent()) {
             return parser.get();
         }
 

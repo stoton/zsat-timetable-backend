@@ -6,9 +6,9 @@ import com.github.stoton.domain.Cache;
 import com.github.stoton.domain.CacheJson;
 import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.TimetableIndexItem;
+import com.github.stoton.parser.Parser;
 import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
-import com.github.stoton.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,14 +18,14 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.stoton.tools.AppProperties.ZSAT_TIMETABLE_ROOT_URL;
+
 @Component
 public class Scheduler {
 
-    private static final String ROOT_URL = "http://szkola.zsat.linuxpl.eu/planlekcji/";
-
     private static final int TWENTY_FOUR_HOURS = 3600000 * 24;
 
-    private static final int ONE_SECOND = 1;
+    private static final int ONE_SECOND = 1000;
 
     private Parser parser;
 
@@ -49,8 +49,8 @@ public class Scheduler {
 
         List<Cache> caches = new ArrayList<>();
 
-        for(TimetableIndexItem timetableIndexItem : timetableIndexItems) {
-            final String url = ROOT_URL + timetableIndexItem.getUrl();
+        for (TimetableIndexItem timetableIndexItem : timetableIndexItems) {
+            final String url = ZSAT_TIMETABLE_ROOT_URL + timetableIndexItem.getUrl();
             final String type = timetableIndexItem.getType();
 
             CompleteTimetable completeTimetable = null;
@@ -75,6 +75,7 @@ public class Scheduler {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         cacheJsonRepository.deleteAll();
         cacheJsonRepository.save(cacheJson);
     }

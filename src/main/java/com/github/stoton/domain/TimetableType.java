@@ -1,28 +1,21 @@
 package com.github.stoton.domain;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum TimetableType {
+
     STUDENT("STUDENT"),
     TEACHER("TEACHER"),
     CLASSROOM("CLASSROOM");
 
     private final String name;
 
-    TimetableType(String name) {
-        this.name = name;
-    }
-
     public static TimetableType parseTimetableType(String name) {
-
-        if(name.equals(STUDENT.toString())) {
-            return STUDENT;
-        }
-
-        if(name.equals(TEACHER.toString())) {
-            return TEACHER;
-        }
-
-        if(name.equals(CLASSROOM.toString())) {
-            return CLASSROOM;
+        for (TimetableType type : values()) {
+            if (type.name.equals(name)) {
+                return type;
+            }
         }
 
         throw new IllegalArgumentException("Unknown timetable type: " + name);

@@ -8,6 +8,4 @@ public interface TimetableIndexItemRepository extends JpaRepository<TimetableInd
     TimetableIndexItem findFirstByName(String name);
 
     TimetableIndexItem findFirstByTeacherID(String teacherId);
-
-
 }

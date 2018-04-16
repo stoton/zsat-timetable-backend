@@ -4,16 +4,13 @@ import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.DaysEnum;
 import com.github.stoton.domain.Lesson;
 import com.github.stoton.domain.Subentry;
-import com.github.stoton.tools.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UtilsTest {
 
@@ -139,7 +136,7 @@ public class UtilsTest {
 
     @Test
     public void extractElementsByRegexWithDigitsTest() {
-        String given =  "12ad4n23";
+        String given = "12ad4n23";
 
         List<String> actual = Utils.extractElementsByRegex(given, "\\d");
 
@@ -206,7 +203,7 @@ public class UtilsTest {
                 .subentries(mondaySubentry)
                 .build();
 
-        CompleteTimetable completeTimetable =  CompleteTimetable
+        CompleteTimetable completeTimetable = CompleteTimetable
                 .builder()
                 .monday(new ArrayList<>())
                 .tuesday(new ArrayList<>())
@@ -248,7 +245,7 @@ public class UtilsTest {
                 .subentries(mondayEmptySubentry)
                 .build();
 
-        CompleteTimetable completeTimetable =  CompleteTimetable
+        CompleteTimetable completeTimetable = CompleteTimetable
                 .builder()
                 .monday(new ArrayList<>())
                 .tuesday(new ArrayList<>())
@@ -294,7 +291,7 @@ public class UtilsTest {
                 .subentries(mondaySecondSubentry)
                 .build();
 
-        CompleteTimetable completeTimetable =  CompleteTimetable
+        CompleteTimetable completeTimetable = CompleteTimetable
                 .builder()
                 .monday(new ArrayList<>())
                 .tuesday(new ArrayList<>())

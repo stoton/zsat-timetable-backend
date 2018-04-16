@@ -6,11 +6,10 @@ import com.github.stoton.domain.Cache;
 import com.github.stoton.domain.CacheJson;
 import com.github.stoton.domain.CompleteTimetable;
 import com.github.stoton.domain.TimetableIndexItem;
+import com.github.stoton.parser.Parser;
 import com.github.stoton.repository.CacheJsonRepository;
 import com.github.stoton.repository.TimetableIndexItemRepository;
-import com.github.stoton.parser.Parser;
 import com.github.stoton.tools.AppProperties;
-import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +43,7 @@ public class TimetableItemController {
 
         Optional<TimetableIndexItem> timetableIndexItem = Optional.ofNullable(timetableIndexItemRepository.findFirstByName(name));
 
-        if(!timetableIndexItem.isPresent())
+        if (!timetableIndexItem.isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         String url = AppProperties.ZSAT_TIMETABLE_ROOT_URL + timetableIndexItem.get().getUrl();
@@ -52,11 +51,10 @@ public class TimetableItemController {
         Optional<CompleteTimetable> completeTimetable = Optional.ofNullable(parser.parseZsatDocument(url, timetableIndexItem.get().getType()));
 
         return completeTimetable.<HttpEntity<CompleteTimetable>>
-                    map(timetable -> ResponseEntity.ok()
-                    .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS)
-                    .cachePrivate())
-                    .body(timetable))
-                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                map(timetable -> ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate())
+                .body(timetable))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping(value = "/timetable", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,15 +63,15 @@ public class TimetableItemController {
 
         timetableIndexItemRepository.deleteAll();
 
-        for(TimetableIndexItem timetableIndexItem : timetableIndexItems) {
+        for (TimetableIndexItem timetableIndexItem : timetableIndexItems) {
             Optional<TimetableIndexItem> current = Optional.ofNullable(timetableIndexItemRepository.findFirstByName(timetableIndexItem.getName()));
 
-            if(!current.isPresent()) {
+            if (!current.isPresent()) {
                 timetableIndexItemRepository.save(timetableIndexItem);
             }
         }
 
-        if(!timetableIndexItems.isEmpty()) {
+        if (!timetableIndexItems.isEmpty()) {
             return ResponseEntity.ok()
                     .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate())
                     .body(timetableIndexItems);
@@ -89,8 +87,9 @@ public class TimetableItemController {
                 .stream()
                 .findFirst();
 
-        if(cache.isPresent()) {
-            List<Cache> participantJsonList = mapper.readValue(cache.get().getJson(), new TypeReference<List<Cache>>(){});
+        if (cache.isPresent()) {
+            List<Cache> participantJsonList = mapper.readValue(cache.get().getJson(), new TypeReference<List<Cache>>() {
+            });
             return ResponseEntity.ok()
                     .cacheControl(CacheControl.maxAge(7, TimeUnit.DAYS).cachePrivate())
                     .body(participantJsonList);
@@ -100,5 +99,4 @@ public class TimetableItemController {
 
         }
     }
-
 }

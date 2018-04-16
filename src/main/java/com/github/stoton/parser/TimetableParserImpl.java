@@ -21,15 +21,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class TimetableParserImpl implements Parser  {
+public class TimetableParserImpl implements Parser {
 
     @Override
-    public CompleteTimetable parseZsatDocument(String url, String type) throws ParseException , IOException {
+    public CompleteTimetable parseZsatDocument(String url, String type) throws ParseException, IOException {
         Document document = Jsoup.connect(url).get();
 
         return ParserFactory.createParser(TimetableType.parseTimetableType(type))
-                        .parseDocument(document);
-        }
+                .parseDocument(document);
+    }
 
     @Override
     public List<TimetableIndexItem> parseDataFromZsatTimetableIndex() throws IOException {
@@ -48,7 +48,7 @@ public class TimetableParserImpl implements Parser  {
 
         Elements urlsElements = elements.select(CssQuery.LINKS_IN_A_LIST.toString());
 
-        for(Element e : urlsElements) {
+        for (Element e : urlsElements) {
             urls.add(e.attr("href"));
         }
 
@@ -63,13 +63,13 @@ public class TimetableParserImpl implements Parser  {
 
     private void extractAndAddToList(List<TimetableIndexItem> list,
                                      Elements elements, String category, ListIterator<String> iterator) {
-        for(Element e : elements) {
+        for (Element e : elements) {
             String name = Utils.parseName(e.text());
 
             String link = iterator.next();
             TimetableIndexItem indexItem = new TimetableIndexItem(name, category, link, AppProperties.ZSAT_TIMETABLE_ROOT_URL + link);
 
-            if(category.equals("TEACHER")) {
+            if (category.equals("TEACHER")) {
                 String teacherID;
 
                 Pattern pattern = Pattern.compile("\\([a-zśłA-ZŁŚ]+\\)");

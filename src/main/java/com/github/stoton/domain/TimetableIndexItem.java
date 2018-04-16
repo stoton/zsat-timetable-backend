@@ -1,7 +1,6 @@
 package com.github.stoton.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +20,6 @@ public class TimetableIndexItem {
     private Long id;
 
     private String name;
-
     private String link;
     private String type;
 

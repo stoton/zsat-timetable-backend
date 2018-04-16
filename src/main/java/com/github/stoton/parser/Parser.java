@@ -9,8 +9,8 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface Parser {
+
     CompleteTimetable parseZsatDocument(String url, String type) throws ParseException, IOException;
 
     List<TimetableIndexItem> parseDataFromZsatTimetableIndex() throws IOException;
-
 }

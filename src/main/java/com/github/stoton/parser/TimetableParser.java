@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.ParseException;
 
 public interface TimetableParser {
+
     TimetableType getType();
 
     CompleteTimetable parseDocument(Document document) throws ParseException, IOException;

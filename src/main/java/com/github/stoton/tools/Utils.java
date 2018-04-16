@@ -1,7 +1,9 @@
 package com.github.stoton.tools;
 
-import com.github.stoton.domain.*;
-import org.jsoup.nodes.Document;
+import com.github.stoton.domain.CompleteTimetable;
+import com.github.stoton.domain.DaysEnum;
+import com.github.stoton.domain.Lesson;
+import com.github.stoton.domain.RegexQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +64,9 @@ public class Utils {
 
     public static String addSpaceToIndex(String s, int index) {
         StringBuilder newString = new StringBuilder();
-        for(int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < s.length(); i++) {
             newString.append(s.charAt(i));
-            if(i == index)
+            if (i == index)
                 newString.append(" ");
         }
         return newString.toString();
@@ -76,7 +78,7 @@ public class Utils {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(elements);
 
-        while(matcher.find()) {
+        while (matcher.find()) {
             strings.add(matcher.group());
         }
 
@@ -110,28 +112,28 @@ public class Utils {
 
     public static void deleteEmptyLessonFromTop(CompleteTimetable completeTimetable) {
 
-        for(int i = completeTimetable.getMonday().size()-1; i >= 0; i--) {
-            if(!completeTimetable.getMonday().get(i).getSubentries().isEmpty()) break;
+        for (int i = completeTimetable.getMonday().size() - 1; i >= 0; i--) {
+            if (!completeTimetable.getMonday().get(i).getSubentries().isEmpty()) break;
             completeTimetable.getMonday().remove(i);
         }
 
-        for (int i = completeTimetable.getTuesday().size()-1; i >= 0; i--) {
-            if(!completeTimetable.getTuesday().get(i).getSubentries().isEmpty()) break;
+        for (int i = completeTimetable.getTuesday().size() - 1; i >= 0; i--) {
+            if (!completeTimetable.getTuesday().get(i).getSubentries().isEmpty()) break;
             completeTimetable.getTuesday().remove(i);
         }
 
-        for(int i = completeTimetable.getWednesday().size()-1; i >= 0; i--) {
-            if(!completeTimetable.getWednesday().get(i).getSubentries().isEmpty()) break;
+        for (int i = completeTimetable.getWednesday().size() - 1; i >= 0; i--) {
+            if (!completeTimetable.getWednesday().get(i).getSubentries().isEmpty()) break;
             completeTimetable.getWednesday().remove(i);
         }
 
-        for(int i = completeTimetable.getThursday().size()-1; i >= 0; i--) {
-            if(!completeTimetable.getThursday().get(i).getSubentries().isEmpty()) break;
+        for (int i = completeTimetable.getThursday().size() - 1; i >= 0; i--) {
+            if (!completeTimetable.getThursday().get(i).getSubentries().isEmpty()) break;
             completeTimetable.getThursday().remove(i);
         }
 
-        for(int i = completeTimetable.getFriday().size()-1; i >= 0; i--) {
-            if(!completeTimetable.getFriday().get(i).getSubentries().isEmpty()) break;
+        for (int i = completeTimetable.getFriday().size() - 1; i >= 0; i--) {
+            if (!completeTimetable.getFriday().get(i).getSubentries().isEmpty()) break;
             completeTimetable.getFriday().remove(i);
         }
     }

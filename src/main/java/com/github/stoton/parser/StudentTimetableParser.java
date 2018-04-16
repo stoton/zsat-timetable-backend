@@ -10,8 +10,6 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.*;
 
 @Service
@@ -53,7 +51,7 @@ public class StudentTimetableParser implements TimetableParser {
 
         Iterable<Element> tableRows = Iterables.skip(table.select(CssQuery.TR_ELEMENT.toString()), 1);
 
-        for(Element tableRow : tableRows) {
+        for (Element tableRow : tableRows) {
 
             Elements tableCells = tableRow.select(CssQuery.L_CLASS.toString());
 
@@ -62,7 +60,7 @@ public class StudentTimetableParser implements TimetableParser {
 
             timePhase = Utils.deleteAllWhitespacesWithLeadingZero(timePhase);
 
-            for(Element tableData : tableCells) {
+            for (Element tableData : tableCells) {
                 List<String> secondaryText;
                 Lesson lesson = Lesson
                         .builder()
@@ -84,16 +82,16 @@ public class StudentTimetableParser implements TimetableParser {
 
                     String primary;
                     String second;
-                    if(!Utils.isOverRange(subjectCounter+1, subject.size())
-                            && subject.get(subjectCounter+1).text().startsWith("#")) {
+                    if (!Utils.isOverRange(subjectCounter + 1, subject.size())
+                            && subject.get(subjectCounter + 1).text().startsWith("#")) {
                         primary = subject.get(subjectCounter).text();
                         subjectCounter++;
                         second = subject.get(subjectCounter).text();
                     } else {
-                            TimetableIndexItem timetableIndexItem = timetableIndexItemRepository.findFirstByTeacherID(teacher.get(teacherCounter).text());
-                            primary = subject.get(subjectCounter).text();
-                            second = timetableIndexItem.getName();
-                            teacherCounter++;
+                        TimetableIndexItem timetableIndexItem = timetableIndexItemRepository.findFirstByTeacherID(teacher.get(teacherCounter).text());
+                        primary = subject.get(subjectCounter).text();
+                        second = timetableIndexItem.getName();
+                        teacherCounter++;
                     }
 
                     String addon = classroomsIterator.next().text();
@@ -108,10 +106,9 @@ public class StudentTimetableParser implements TimetableParser {
                     String filteredPrimary = candidateForSubject.orElse("");
 
 
-                    if(filteredPrimary.isEmpty()) {
+                    if (filteredPrimary.isEmpty()) {
                         subentry.setPrimaryText(primary);
-                    }
-                    else {
+                    } else {
                         subentry.setPrimaryText(filteredPrimary);
                     }
 

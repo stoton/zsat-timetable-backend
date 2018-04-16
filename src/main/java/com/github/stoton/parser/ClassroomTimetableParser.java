@@ -8,10 +8,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.*;
 
 @Service
@@ -53,7 +51,7 @@ public class ClassroomTimetableParser implements TimetableParser {
 
         Iterable<Element> tableRows = Iterables.skip(table.select(CssQuery.TR_ELEMENT.toString()), 1);
 
-        for(Element tableRow : tableRows) {
+        for (Element tableRow : tableRows) {
 
             Elements tableCells = tableRow.select(CssQuery.L_CLASS.toString());
 
@@ -102,7 +100,7 @@ public class ClassroomTimetableParser implements TimetableParser {
 
                     String filteredClassroom = candidateForClassroom.orElse("");
 
-                    if(filteredClassroom.isEmpty()) {
+                    if (filteredClassroom.isEmpty()) {
                         subentry.setAddon(Utils.addSpaceToIndex(classroom, 0));
                     } else {
                         subentry.setAddon(Utils.addSpaceToIndex(filteredClassroom, 0));
