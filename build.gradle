@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '1.5.6.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '1.5.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
@@ -15,41 +15,38 @@ apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-//
+
 //war {
-//	baseName = 'zsat-timetable-backend'
-//	version = '1.0.3'
+//    baseName = 'zsat-timetable-backend'
+//    version = '1.0.3'
 //}
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 compileJava.options.encoding = 'UTF-8'
 
 tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
+    options.encoding = 'UTF-8'
 }
 
 dependencies {
-	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.39'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.5.6.RELEASE'
-	compile('org.springframework.boot:spring-boot-starter-web')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
-	compile group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.39'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '1.5.6.RELEASE'
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
 
+    compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.6.1'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.6.1'
 
-	compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
-	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.6.1'
-	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.6.1'
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.7'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '1.5.6.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '1.5.6.RELEASE', ext: 'pom'
+    compile group: 'org.hibernate', name: 'hibernate-java8', version: '5.2.13.Final'
 
-	compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.7'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '1.5.6.RELEASE'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '1.5.6.RELEASE', ext: 'pom'
-	compile group: 'org.hibernate', name: 'hibernate-java8', version: '5.2.13.Final'
-
-
-
-//	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+//    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }

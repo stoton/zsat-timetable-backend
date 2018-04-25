@@ -8,7 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableSpringConfigured
-public class App {
+public class App
+//        extends SpringBootServletInitializer
+{
 
 //    @Override
 //    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
