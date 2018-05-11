@@ -38,7 +38,7 @@ public class TimetableItemController {
         this.cacheJsonRepository = cacheJsonRepository;
     }
 
-    @GetMapping(value = "/timetable/{name:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{name:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<CompleteTimetable> parseTimetable(@PathVariable String name) throws IOException, ParseException {
 
         Optional<TimetableIndexItem> timetableIndexItem = Optional.ofNullable(timetableIndexItemRepository.findFirstByName(name));
@@ -57,7 +57,7 @@ public class TimetableItemController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(value = "/timetable", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<List<TimetableIndexItem>> getTimetableIndexItems() throws IOException {
         List<TimetableIndexItem> timetableIndexItems = parser.parseDataFromZsatTimetableIndex();
 
@@ -79,7 +79,7 @@ public class TimetableItemController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/timetable/cached", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/cached", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpEntity<List<Cache>> cachedData() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 

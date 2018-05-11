@@ -22,7 +22,7 @@ public class SwaggerConfiguration {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.github.stoton.controller"))
-                .paths(regex("/timetable.*"))
+                .paths(regex("/.*"))
                 .build();
     }
 
