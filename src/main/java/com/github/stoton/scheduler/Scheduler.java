@@ -43,6 +43,7 @@ public class Scheduler {
     @Scheduled(fixedDelay = TWENTY_FOUR_HOURS, initialDelay = ONE_SECOND)
     public void collectData() {
 
+
         ObjectMapper mapper = new ObjectMapper();
 
         List<TimetableIndexItem> timetableIndexItems = timetableIndexItemRepository.findAll();
