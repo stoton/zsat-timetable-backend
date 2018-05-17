@@ -51,5 +51,5 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-java8', version: '5.2.13.Final'
 
 
-//	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
