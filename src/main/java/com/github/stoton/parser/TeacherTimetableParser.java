@@ -25,7 +25,7 @@ public class TeacherTimetableParser implements TimetableParser {
 
     @Override
     public CompleteTimetable parseDocument(Document document) {
-
+        
         DaysEnum currentDay = DaysEnum.MONDAY;
 
         Elements table = document.select(CssQuery.HTML_TABLE_CLASS.toString());
@@ -60,7 +60,10 @@ public class TeacherTimetableParser implements TimetableParser {
 
                 if (isSpecialCase(tableData)) {
 
+
+
                     String fixedHtml = fixHtml(tableData.html());
+
 
                     Lesson lesson = Lesson
                             .builder()
@@ -177,8 +180,8 @@ public class TeacherTimetableParser implements TimetableParser {
                     .append(timetableStrategyUtils.appendEndOfHtml(html, indexOfElementToMerge + 5));
 
             html = correctHtml.toString();
-            html = html.replaceAll(",", "");
         }
+        html = html.replaceAll(",", "");
 
         return html;
     }
