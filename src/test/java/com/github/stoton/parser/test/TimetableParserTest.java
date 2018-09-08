@@ -158,4 +158,44 @@ public class TimetableParserTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void teacherParserTestWhenDocumentIsInCorrect() throws IOException, ParseException {
+
+        timetableParser = new TeacherTimetableParser();
+
+        List<Subentry> mondaySubentries = new ArrayList<>();
+
+        mondaySubentries.add(new Subentry("wf", "4 Tż-2/2", "@"));
+        mondaySubentries.add(new Subentry("wf", "4 TIG-2/3", "@"));
+        mondaySubentries.add(new Subentry("wf", "4 TAŻ-1/2", "@"));
+
+        Lesson mondayLesson = Lesson
+                .builder()
+                .lessonNumber("7")
+                .timePhase("13:15-14:00")
+                .subentries(mondaySubentries)
+                .build();
+
+        CompleteTimetable expected = CompleteTimetable
+                .builder()
+                .monday(new ArrayList<>(Collections.singletonList(mondayLesson)))
+                .tuesday(Collections.emptyList())
+                .wednesday(Collections.emptyList())
+                .thursday(Collections.emptyList())
+                .friday(Collections.emptyList())
+                .build();
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream file = classLoader.getResourceAsStream("inCorrectTeacherTimetable.html");
+
+        String html = CharStreams.toString(new InputStreamReader(
+                file, Charsets.UTF_8));
+
+        Document document = Jsoup.parse(html);
+
+        CompleteTimetable actual = timetableParser.parseDocument(document);
+
+        assertEquals(expected, actual);
+    }
 }
